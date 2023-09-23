@@ -19,7 +19,6 @@ import (
 // A Blade is a Saw execution instance
 type Blade struct {
 	config *config.Configuration
-	aws    *config.AWSConfiguration
 	output *config.OutputConfiguration
 	cwl    *cloudwatchlogs.CloudWatchLogs
 }
@@ -68,9 +67,7 @@ func (b *Blade) GetLogGroups() []*cloudwatchlogs.LogGroup {
 		out *cloudwatchlogs.DescribeLogGroupsOutput,
 		lastPage bool,
 	) bool {
-		for _, group := range out.LogGroups {
-			groups = append(groups, group)
-		}
+		groups = append(groups, out.LogGroups...)
 		return !lastPage
 	})
 	return groups
@@ -84,9 +81,7 @@ func (b *Blade) GetLogStreams() []*cloudwatchlogs.LogStream {
 		out *cloudwatchlogs.DescribeLogStreamsOutput,
 		lastPage bool,
 	) bool {
-		for _, stream := range out.LogStreams {
-			streams = append(streams, stream)
-		}
+		streams = append(streams, out.LogStreams...)
 		return !lastPage
 	})
 
